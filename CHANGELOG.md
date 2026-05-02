@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.9.5 - 2026-05-02
+
+- 新增 `KVIDEO_MEDIA_PROXY_MODE` 运行时开关：Vercel / Cloudflare 默认仍保持受限托管模式，但部署者可显式设置 `enabled`，让播放器的“智能重试 / 总是代理”策略在 iOS/Safari HLS 直连失败时生效。
+- 播放器设置里的代理选项调整为“多环境播放策略”，文案明确覆盖桌面、移动端、iOS Safari 与托管部署差异。
+- Docker Compose、`.env.example`、`wrangler.toml` 和 README 补齐媒体代理、公共中继、Upstash Redis 与托管环境边界说明。
+- 新增运行时能力回归测试，覆盖托管环境默认禁用代理、显式启用代理，以及自托管强制直连的行为。
+- Redis 客户端测试补充 Vercel 缺少 Upstash Token 时的降级断言，避免 `/api/user/sync` 因不完整 Redis 配置再次返回 500。
+
 ## 4.9.4 - 2026-05-02
 
 - Docker Compose 新增持久化 Redis 服务，默认通过 `REDIS_URL=redis://redis:6379/0` 启用自托管托管账户存储。

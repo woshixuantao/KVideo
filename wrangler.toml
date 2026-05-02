@@ -8,6 +8,10 @@ compatibility_flags = ["nodejs_compat", "global_fetch_strictly_public"]
 #   wrangler secret put AUTH_SECRET
 #   wrangler secret put UPSTASH_REDIS_REST_URL
 #   wrangler secret put UPSTASH_REDIS_REST_TOKEN
+#
+# Optional iOS/Safari HLS compatibility mode:
+#   set KVIDEO_MEDIA_PROXY_MODE=enabled
+# Public unauthenticated proxy access still requires KVIDEO_PUBLIC_RELAY_ENABLED=true.
 
 [assets]
 directory = ".open-next/assets"

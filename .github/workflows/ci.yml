@@ -48,6 +48,9 @@ jobs:
       - name: Workers build
         run: npm run cf:build
 
+      - name: Legacy Pages build
+        run: npm run pages:build
+
       - name: Audit production dependencies (high severity+)
         run: npm audit --omit=dev --audit-level=high
 

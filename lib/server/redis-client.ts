@@ -1,6 +1,7 @@
 import 'server-only';
 
 import { Redis } from '@upstash/redis';
+import type { Socket } from 'node:net';
 
 type RedisPrimitive = string | number | null;
 type RedisRawValue = RedisPrimitive | RedisRawValue[];
@@ -128,6 +129,16 @@ function encodeCommand(args: string[]): Buffer {
   return Buffer.from(parts.join(''));
 }
 
+async function importNodeNet(): Promise<typeof import('node:net')> {
+  const moduleName = 'node:' + 'net';
+  return import(/* webpackIgnore: true */ moduleName) as Promise<typeof import('node:net')>;
+}
+
+async function importNodeTls(): Promise<typeof import('node:tls')> {
+  const moduleName = 'node:' + 'tls';
+  return import(/* webpackIgnore: true */ moduleName) as Promise<typeof import('node:tls')>;
+}
+
 function readLine(buffer: Buffer, offset: number): { line: string; offset: number } | null {
   const end = buffer.indexOf('\r\n', offset);
   if (end === -1) return null;
@@ -207,17 +218,17 @@ async function sendRedisCommands(redisUrl: URL, commands: string[][]): Promise<R
       socket.write(payload);
     };
 
-    let socket: import('node:net').Socket;
+    let socket: Socket;
 
     if (useTls) {
-      import('node:tls')
+      importNodeTls()
         .then(({ connect }) => {
           socket = connect({ host, port, servername: host }, onReady);
           bindSocketHandlers(socket);
         })
         .catch((error: unknown) => finish(() => reject(error)));
     } else {
-      import('node:net')
+      importNodeNet()
         .then(({ connect }) => {
           socket = connect({ host, port }, onReady);
           bindSocketHandlers(socket);
@@ -225,7 +236,7 @@ async function sendRedisCommands(redisUrl: URL, commands: string[][]): Promise<R
         .catch((error: unknown) => finish(() => reject(error)));
     }
 
-    function bindSocketHandlers(activeSocket: import('node:net').Socket): void {
+    function bindSocketHandlers(activeSocket: Socket): void {
       activeSocket.setTimeout(timeout);
 
       activeSocket.on('data', (chunk: Buffer) => {

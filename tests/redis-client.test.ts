@@ -148,3 +148,20 @@ test('TCP Redis client supports Docker-style redis:// storage', async () => {
   delete process.env.REDIS_URL;
   resetRedisClientForTests();
 });
+
+test('managed deployments ignore incomplete Upstash credentials without throwing', () => {
+  process.env.VERCEL = '1';
+  process.env.UPSTASH_REDIS_REST_URL = 'https://example.upstash.io';
+  delete process.env.UPSTASH_REDIS_REST_TOKEN;
+  process.env.REDIS_URL = 'redis://127.0.0.1:6379/0';
+  resetRedisClientForTests();
+
+  try {
+    assert.equal(getRedisClient(), null);
+  } finally {
+    delete process.env.VERCEL;
+    delete process.env.UPSTASH_REDIS_REST_URL;
+    delete process.env.REDIS_URL;
+    resetRedisClientForTests();
+  }
+});

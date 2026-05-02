@@ -164,10 +164,10 @@ export function PlayerSettings({
                 <div>
                     <h3 className="font-medium text-[var(--text-color)] mb-2 inline-flex items-center gap-2">
                         <Icons.Globe size={18} className="text-[var(--accent-color)]" />
-                        代理播放模式
+                        多环境播放策略
                     </h3>
                     <p className="text-sm text-[var(--text-color-secondary)] mb-4">
-                        控制视频播放时的网络请求策略
+                        控制不同浏览器、iOS Safari 和托管部署下的视频请求策略
                     </p>
                     {mediaProxyEnabled ? (
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -179,7 +179,7 @@ export function PlayerSettings({
                                     }`}
                             >
                                 <div className="font-semibold">智能重试 (推荐)</div>
-                                <div className="text-sm opacity-80 mt-1">直连优先，失败时尝试代理</div>
+                                <div className="text-sm opacity-80 mt-1">直连优先，失败时尝试代理，适合 iOS/Safari 兼容</div>
                             </button>
                             <button
                                 onClick={() => onProxyModeChange('none')}
@@ -189,7 +189,7 @@ export function PlayerSettings({
                                     }`}
                             >
                                 <div className="font-semibold">仅直连</div>
-                                <div className="text-sm opacity-80 mt-1">不使用代理，失败则报错</div>
+                                <div className="text-sm opacity-80 mt-1">不使用代理，适合源站本身跨端兼容时</div>
                             </button>
                             <button
                                 onClick={() => onProxyModeChange('always')}
@@ -199,7 +199,7 @@ export function PlayerSettings({
                                     }`}
                             >
                                 <div className="font-semibold">总是代理</div>
-                                <div className="text-sm opacity-80 mt-1">所有请求都通过代理转发</div>
+                                <div className="text-sm opacity-80 mt-1">所有播放请求都通过服务端代理转发</div>
                             </button>
                         </div>
                     ) : (
